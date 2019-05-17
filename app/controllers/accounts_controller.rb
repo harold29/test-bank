@@ -6,8 +6,14 @@ class AccountsController < ApplicationController
   before_action :get_account, only: %i[transfer show]
 
   def show
-    get_transactions(@account)
-    respond_to :html
+    if !current_user.admin?
+      if @account
+        get_transactions(@account)
+      end
+      respond_to :html
+    else
+      redirect_to action: 'index'
+    end
   end
 
   def index
