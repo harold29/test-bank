@@ -31,16 +31,20 @@ class Transaction < ApplicationRecord
     transfer_log(user, origin, destination, :failed, amount)
   end
 
-  def self.deposit_start(destination, amount)
-    deposit_log(destination, :started, amount)
+  def self.deposit_start(user, destination, amount)
+    deposit_log(user, destination, :started, amount)
   end
 
-  def self.deposit_successful(destination, amount)
-    deposit_log(destination, :successful, amount)
+  def self.deposit_successful(user, destination, amount)
+    deposit_log(user, destination, :successful, amount)
   end
 
-  def self.deposit_failed(destination, amount)
-    deposit_log(destination, :failed, amount)
+  def self.deposit_failed(user, destination, amount)
+    deposit_log(user, destination, :failed, amount)
+  end
+
+  def self.by_relation(account_id)
+    where("status = ? and (origin_account_id = ? or destination_account_id = ?)", 2, account_id, account_id).order(created_at: :desc)
   end
 
   def withdraw_log(amount)
@@ -68,9 +72,9 @@ class Transaction < ApplicationRecord
     )
   end
 
-  def deposit_log(destination, status, amount)
+  def self.deposit_log(user, destination, status, amount)
     create(
-      user: current_user,
+      user: user,
       origin_account: destination,
       destination_account: destination,
       amount: amount,
