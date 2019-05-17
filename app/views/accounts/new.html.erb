@@ -1,0 +1,16 @@
+<div>
+  <h4>
+    New Account
+  </h4>
+</div>
+<div>
+  <%= form_for @account, url: { action: 'create' } do |f| %>
+    <%= f.label :user, 'User' %><br>
+    <%= f.select :user_id, options_from_collection_for_select(User.all, :id, :email) %><br><br>
+    <%= f.label :amount, 'Initial Amount' %><br>
+    <%= f.number_field :amount, min: 0 %><br><br>
+    <%= f.label :active, 'Active' %><br>
+    <%= f.select :active, [['Yes', true], ['No', false]]  %><br><br>
+    <%= f.submit 'Create Account'  %>
+  <% end %>
+</div>
