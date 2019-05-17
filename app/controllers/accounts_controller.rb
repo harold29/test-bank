@@ -1,7 +1,7 @@
 class AccountsController < ApplicationController
   before_action :authenticate_user!
   check_authorization
-  load_and_authorize_resource :only => [:show]
+  load_and_authorize_resource :only => [:show, :transfer]
 
   before_action :get_account, only: %i[transfer show]
 

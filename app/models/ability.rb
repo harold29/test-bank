@@ -5,7 +5,7 @@ class Ability
 
   def initialize(user)
     if user.present?
-      can [:read, :create], Account
+      can [:read, :create, :transfer], Account
       cannot :manage, Transaction
 
       if user.admin?
