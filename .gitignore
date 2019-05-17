@@ -6,12 +6,17 @@
 
 # Ignore bundler config.
 /.bundle
+/harold-bank/.bundle
 
 # Ignore all logfiles and tempfiles.
 /log/*
+/harold-bank/log/*
 /tmp/*
+/harold-bank/tmp/*
 !/log/.keep
+!/harold-bank/log/.keep
 !/tmp/.keep
+!/harold-bank/tmp/.keep
 
 # Ignore uploaded files in development
 /storage/*
@@ -25,3 +30,4 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+/harold-bank/config/master.key
