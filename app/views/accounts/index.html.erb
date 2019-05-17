@@ -1,0 +1,62 @@
+<div>
+  <h4>
+    Platform Accounts
+  </h4>
+  <table>
+    <tr>
+      <th>
+        Username
+      </th>
+      <th>
+        Account Number
+      </th>
+      <th>
+        Active
+      </th>
+      <th>
+        Amount
+      </th>
+      <th>
+        Actions
+      </th>
+    </tr>
+    <% @accounts.each do |account| %>
+      <tr>
+        <td>
+          <%= account.user.email %>
+        </td>
+        <td>
+          <%= account.account_number %>
+        </td>
+        <td>
+          <%= account.active ? "Yes" : "No" %>
+        </td>
+        <td>
+          <%= account.amount %>
+        </td>
+        <td>
+
+        </td>
+      </tr>
+    <% end %>
+  </table>
+</div>
+<div>
+  <%= link_to "New Account", new_account_path() %>
+</div>
+<div>
+  <div>
+    <h4>
+      Deposit to Account
+    </h4>
+  </div>
+  <div>
+    <%= form_for :transfer, url: { action: 'deposit' } do |f| %>
+      <%= f.label :account_number, 'Account Number' %><br>
+      <%= f.select :account_number, options_from_collection_for_select(Account.all, :account_number, :account_number) %><br><br>
+      <%= f.label :amount, 'Amount' %><br>
+      <%= f.number_field :amount, min: 0 %><br><br>
+      <%= f.submit "Send Deposit" %>
+    <% end %>
+  </div>
+</div>

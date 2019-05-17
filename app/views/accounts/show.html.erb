@@ -1,0 +1,102 @@
+<table>
+  <tr>
+    <th>
+      Username
+    </th>
+    <th>
+      Account Number
+    </th>
+    <th>
+      Active
+    </th>
+    <th>
+      Amount
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <%= @account.user.email %>
+    </td>
+    <td>
+      <%= @account.account_number %>
+    </td>
+    <td>
+      <%= @account.active ? "Yes" : "No" %>
+    </td>
+    <td>
+      <%= @account.amount %>
+    </td>
+  </tr>
+</table>
+
+<div>
+  <%= form_for :transfer, url: { action: 'transfer' } do |f| %>
+    <%= f.label :account_number, 'Account Number' %><br>
+    <%= f.select :account_number, options_from_collection_for_select(Account.all, :account_number, :account_number) %>
+    <%# f.text_field :account_number  %><br>
+    <%= f.label :amount, 'Amount' %><br>
+    <%= f.number_field :amount, min: 0 %><br><br>
+    <%= f.submit "Send Transfer" %>
+  <% end %>
+</div>
+
+<div>
+  <div>
+    <h4>
+      Transactions
+    </h4>
+  </div>
+  <div>
+    <table>
+      <tr>
+        <th>
+          Transaction Date
+        </th>
+        <th>
+          Transaction Id
+        </th>
+        <th>
+          Transaction Type
+        </th>
+        <th>
+          Origin Account
+        </th>
+        <th>
+          Destination Account
+        </th>
+        <th>
+          Amount
+        </th>
+        <th>
+          Status
+        </th>
+      <% @transactions.each do |transaction|  %>
+        </tr>
+          <td>
+            <%= transaction.created_at.strftime('%d/%m/%Y %H:%M:%S') %>
+          </td>
+          <td>
+            <%= transaction.id %>
+          </td>
+          <td>
+            <%= transaction.action %>
+          </td>
+          <td>
+            <%= @account.account_number == transaction.origin_account.account_number ? "My Account" : transaction.origin_account.account_number %>
+          </td>
+          <td>
+            <%= @account.account_number == transaction.destination_account.account_number ? "My Account" : transaction.destination_account.account_number %>
+          </td>
+          <td>
+            <%= transaction.action == "transfer" && @account.account_number == transaction.origin_account.account_number ? "-#{transaction.amount}": transaction.amount  %>
+          </td>
+          <td>
+            <%= transaction.status  %>
+          </td>
+        <tr>
+      <% end %>
+
+      </tr>
+    </table>
+  </div>
+</div>

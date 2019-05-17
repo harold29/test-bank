@@ -28,8 +28,8 @@ ActiveRecord::Schema.define(version: 2019_05_15_115353) do
 
   create_table "transactions", force: :cascade do |t|
     t.bigint "user_id"
-    t.string "status"
-    t.string "action"
+    t.integer "status"
+    t.integer "action"
     t.float "amount"
     t.bigint "origin_account_id"
     t.bigint "destination_account_id"
