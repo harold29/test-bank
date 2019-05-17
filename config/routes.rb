@@ -5,4 +5,6 @@ Rails.application.routes.draw do
   resources :accounts
   post 'transfer', to: 'accounts#transfer'
   post 'deposit', to: 'accounts#deposit'
+
+  resources :transactions
 end
