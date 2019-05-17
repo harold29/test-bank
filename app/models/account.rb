@@ -6,6 +6,7 @@ class Account < ApplicationRecord
 
   validates :amount, numericality: { greater_than_or_equal_to: 0.0 }
   validates :user, presence: true
+  validate
 
   def initialize(attributes = {})
     super
@@ -20,27 +21,44 @@ class Account < ApplicationRecord
   end
 
   def deposit(amount)
+    Transaction.deposit_start(self, amount)
     if amount >= 0.0
       self.amount += amount
-      self.save!
+      if self.save!
+        Transaction.deposit_successful(self, amount)
+      else
+        Transaction.deposit_failed(self, amount)
+      end
     else
-      # EXCEPTION
+      self.errors[:base] << 'No destination account'
+      Transaction.deposit_failed(self, amount)
     end
   end
 
   def transfer(destination, amount)
     destination_account = Account.by_account_number(destination)
+    Transaction.transfer_start(user, self, destination_account, amount)
     if destination_account
       if funds_available?(amount)
         self.amount -= amount
-        self.save!
         destination_account.amount += amount
-        destination_account.save!
+
+        if save! && destination_account.save!
+          Transaction.transfer_successful(user, self, destination_account, amount)
+          return true
+        else
+          Transaction.transfer_failed(user, self, destination_account, amount)
+          return false
+        end
       else
-        # EXCEPTION
+        self.errors[:base] << 'No funds available'
+        Transaction.transfer_failed(user, self, destination_account, amount)
+        return false
       end
     else
-      # EXCEPTION
+      self.errors[:base] << 'No existing destination account'
+      Transaction.transfer_failed(user, self, destination_account, amount)
+      return false
     end
   end
 
@@ -49,7 +67,7 @@ class Account < ApplicationRecord
       self.amount -= amount
       self.save!
     else
-      # EXCEPTIOn
+      self.errors[:base] << 'No funds available'
     end
   end
 
