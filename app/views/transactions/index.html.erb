@@ -1,0 +1,55 @@
+<div>
+  <h4>
+    Platform Operations
+  </h4>
+  <table>
+    <tr>
+      <th>
+        Transaction Date
+      </th>
+      <th>
+        Transaction Id
+      </th>
+      <th>
+        Transaction Type
+      </th>
+      <th>
+        Origin Account
+      </th>
+      <th>
+        Destination Account
+      </th>
+      <th>
+        Amount
+      </th>
+      <th>
+        Status
+      </th>
+    </tr>
+    <% @transactions.each do |transaction|  %>
+      <tr>
+        <td>
+          <%= transaction.created_at.strftime('%d/%m/%Y %H:%M:%S') %>
+        </td>
+        <td>
+          <%= transaction.id %>
+        </td>
+        <td>
+          <%= transaction.action %>
+        </td>
+        <td>
+          <%= transaction.origin_account.account_number %>
+        </td>
+        <td>
+          <%= transaction.destination_account.account_number %>
+        </td>
+        <td>
+          <%= transaction.amount  %>
+        </td>
+        <td>
+          <%= transaction.status  %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+</div>
