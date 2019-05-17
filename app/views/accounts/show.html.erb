@@ -33,7 +33,7 @@
   <div>
     <%= form_for :transfer, url: { action: 'transfer' } do |f| %>
       <%= f.label :account_number, 'Account Number' %><br>
-      <%= f.select :account_number, options_from_collection_for_select(Account.all, :account_number, :account_number) %>
+      <%= f.select :account_number, options_from_collection_for_select(Account.all.select { |a| a.id != @account.id }, :account_number, :account_number) %>
       <%# f.text_field :account_number  %><br>
       <%= f.label :amount, 'Amount' %><br>
       <%= f.number_field :amount, min: 0 %><br><br>
