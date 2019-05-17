@@ -6,10 +6,11 @@ class Account < ApplicationRecord
 
   validates :amount, numericality: { greater_than_or_equal_to: 0.0 }
   validates :user, presence: true
-  validate
 
   def initialize(attributes = {})
     super
+
+    self.account_number = SecureRandom.alphanumeric(5).upcase
   end
 
   def self.by_user_id(id)
@@ -21,17 +22,17 @@ class Account < ApplicationRecord
   end
 
   def deposit(amount)
-    Transaction.deposit_start(self, amount)
+    Transaction.deposit_start(user, self, amount)
     if amount >= 0.0
       self.amount += amount
       if self.save!
-        Transaction.deposit_successful(self, amount)
+        Transaction.deposit_successful(user, self, amount)
       else
-        Transaction.deposit_failed(self, amount)
+        Transaction.deposit_failed(user, self, amount)
       end
     else
       self.errors[:base] << 'No destination account'
-      Transaction.deposit_failed(self, amount)
+      Transaction.deposit_failed(user, self, amount)
     end
   end
 
